@@ -53,7 +53,7 @@
                         placeholder="Quantity"
                         id="qty"
                         type="number"
-                        step="0.1"
+                        step="1"
                         required
                       />
                     </div>
@@ -61,11 +61,11 @@
                       <select class="selection browser-default" required>
                         <option value="" disabled selected>Select</option>
                         <option value="g">Grams (g)</option>
-                        <option value="kg">Kilograms (kg)</option>
+
                         <option value="tsp">Teaspoon (tsp)</option>
                         <option value="tbsp">Tablespoon (tbsp)</option>
                         <option value="ml">Millilitres (ml)</option>
-                        <option value="l">Llitres (l)</option>
+
                         <option value="cup">Cup</option>
                         <option value="">Single Item</option>
                       </select>
@@ -93,6 +93,12 @@
                   <tbody id="table-body"></tbody>
                 </table>
                 <a href="#" class="clear-list btn black">Clear List</a>
+                <a
+                  href="#"
+                  class="clear-list btn blue"
+                  onclick="unitConversion()"
+                  >Unit Conversion</a
+                >
               </div>
             </div>
           </div>

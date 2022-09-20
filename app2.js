@@ -20,8 +20,29 @@ class UI {
     <td><a href="#" class="delete">X<a></td>
   `;
 
-    //APPEND NEW ROW TO TABLE
-    table.appendChild(tableRow);
+    //CHECK UNIT CONERVERSION BEFORE APPENDING
+
+    if (table.rows.length === 0) {
+      //APPEND NEW ROW TO TABLE
+      table.appendChild(tableRow);
+    } else {
+      //GET TABLE ROW VARIABLE
+      let tr = table.getElementsByTagName("tr");
+      //  ITTERATE ROWS
+      for (let i = 0; i < table.rows.length; i++) {
+        //TABLE ROW, 2ND & 3RD CELLS, i
+        let weightCell = tr[i].getElementsByTagName("td")[2];
+
+        if (weightCell.innerHTML !== "g") {
+          unitConversion();
+          //APPEND NEW ROW TO TABLE
+          table.appendChild(tableRow);
+        } else {
+          //APPEND NEW ROW TO TABLE
+          table.appendChild(tableRow);
+        }
+      }
+    }
   }
 
   searchTableForDuplicate() {
@@ -41,55 +62,14 @@ class UI {
           //CHECK FOR EQUALITY
           if (tdp.innerHTML === td.innerHTML) {
             tdp.nextElementSibling.innerHTML = `${
-              parseFloat(td.nextElementSibling.innerHTML) +
-              parseFloat(tdp.nextElementSibling.innerHTML)
+              parseInt(td.nextElementSibling.innerHTML) +
+              parseInt(tdp.nextElementSibling.innerHTML)
             }`;
 
             td.parentElement.remove();
             break;
           }
         }
-      }
-    }
-  }
-
-  greaterUnit() {
-    //GET TABLE ELEMENT
-    const table = document.getElementById("table-body");
-    //GET TABLE ROW ELEMENT
-    let tr = table.getElementsByTagName("tr");
-    let weight = document.querySelector(".selection").value;
-    //ITTERATE ROWS
-    for (let i = 0; i < table.rows.length; i++) {
-      //TABLE ROW, 2ND & 3RD CELLS, i
-      let qtyCell = tr[i].getElementsByTagName("td")[1];
-      let weightCell = tr[i].getElementsByTagName("td")[2];
-      if (weight.innerHTML === "kg") {
-        qtyCell.innerHTML = parseFloat(qtyCell.innerHTML / 1000).toFixed(1);
-        qtyCell.innerHTML = parseFloat(qtyCell.innerHTML).toFixed(1);
-      }
-    }
-  }
-
-  newUnitOfMeasurement() {
-    //GET TABLE ELEMENT
-    const table = document.getElementById("table-body");
-    //GET TABLE ROW ELEMENT
-    let tr = table.getElementsByTagName("tr");
-    //ITTERATE ROWS
-    for (let i = 0; i < table.rows.length; i++) {
-      //TABLE ROW, 2ND & 3RD CELLS, i
-      let qtyCell = tr[i].getElementsByTagName("td")[1];
-      let weightCell = tr[i].getElementsByTagName("td")[2];
-
-      // console.log(typeof parseFloat(qtyCell.innerHTML));
-
-      if (qtyCell.innerHTML > 999 && weightCell.innerHTML === "g") {
-        qtyCell.innerHTML = parseInt(qtyCell.innerHTML / 1000).toFixed(1);
-        // qtyCell.innerHTML = parseFloat(qtyCell.innerHTML);
-
-        weightCell.innerHTML = "kg";
-        //
       }
     }
   }
@@ -127,12 +107,6 @@ itemForm.addEventListener("submit", function (e) {
   //SEARCH TABLE FOR DUPLICATES
   ui.searchTableForDuplicate();
 
-  //SEARCH TABLE FOR HIGH QTY
-  ui.newUnitOfMeasurement();
-
-  //CHECK UNIT FOR GREATER UNIT OF MEASUREMENT
-  ui.greaterUnit();
-
   //CLEAR FIELDS
   ui.clearFields();
 
@@ -150,3 +124,33 @@ document.getElementById("table-body").addEventListener("click", function (e) {
 
   e.preventDefault();
 });
+
+//UNIT CONVERSION BUTTON
+function unitConversion() {
+  //GET TABLE ELEMENT
+  const table = document.getElementById("table-body");
+  //GET TABLE ROW ELEMENT
+  let tr = table.getElementsByTagName("tr");
+  //ITTERATE ROWS
+  for (let i = 0; i < table.rows.length; i++) {
+    //TABLE ROW, 2ND & 3RD CELLS, i
+    let qtyCell = tr[i].getElementsByTagName("td")[1];
+    let weightCell = tr[i].getElementsByTagName("td")[2];
+
+    // TOGGLE WEIGHT CONVERSION
+    if (weightCell.innerHTML !== "g" && qtyCell.innerHTML > 0.9) {
+      qtyCell.innerHTML = Math.ceil(parseInt(qtyCell.innerHTML) * 1000).toFixed(
+        0
+      );
+      weightCell.innerHTML = "g";
+    } else {
+      if (weightCell.innerHTML === "g" && qtyCell.innerHTML < 999) {
+      } else {
+        qtyCell.innerHTML = Math.ceil(
+          parseInt(qtyCell.innerHTML) / 1000
+        ).toFixed(1);
+        weightCell.innerHTML = "kg";
+      }
+    }
+  }
+}
