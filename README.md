@@ -1,2 +1,2 @@
 # simpleGroceries
-First itteration of grocery list application
+First iteration of grocery list application
